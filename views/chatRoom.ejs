@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简易聊天室</title>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <%= contentTitle%>
+        </h1>
+        <div class="chatContent">
+            <textarea id="chatText" cols="30" rows="10" name="">
+
+            </textarea>
+            <button id="chatBtn">发送</button>
+        </div>
+        <div class="chatPersons">
+
+        </div>
+    </div>
+
+    <!-- <script type="text/javascript" src="http://wulv5.com/js/socket.io.min.js"> -->
+    <script type="text/javascript" src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js">
+    </script>
+    <script type="text/javascript">
+
+        //连接聊天室io服务器，io服务器的根地址
+        var socket = io.connect('/');
+
+        var textEle = document.getElementById('chatText'),
+            btnEle = document.getElementById('chatBtn');
+
+        btnEle.onclick = function(){
+            var chatContent = textEle.value;
+            if(!chatContent){
+                return;
+            }
+            socket.send(chatContent);
+            textEle.value = "";
+        }
+
+        socket.on('message',function(mes){
+            var div = document.createElement('div');
+            div.className = 'mes';
+            div.innerText = mes;
+            document.body.appendChild(div);
+        })
+    
+    </script>
+</body>
+</html>
